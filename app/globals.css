@@ -1,0 +1,414 @@
+@import "tailwindcss";
+
+@theme {
+  /* Soft Carnival: a warm white page, one lilac field for the hero, soft
+     gradient image grounds for sections (mist, sand, tide, peach, nebula), and a
+     deep plum ink for text and the few dark moments. Semantic tokens swap
+     inside .on-field / .on-tint / .on-night so components stay
+     colour-agnostic. */
+  --color-field: #dcd3f5; /* Lilac: hero field, and the action colour on dark */
+  --color-night: #1f1b2e; /* Plum ink: text, dark sections */
+  --color-night-2: #2b2640;
+  --color-leaf: #5b3fa8; /* Violet: links and accents on light grounds (7.3:1) */
+  --color-alert: #b3261e; /* Functional: errors only */
+  --color-paper: #faf8f4;
+  --color-paper-2: #f1ede6;
+  --color-ink: #1f1b2e;
+  --color-slate: #5f5a6e;
+  --color-dim: #a9a3bd; /* Secondary text on plum (6.9:1) */
+  --color-blush: #f6d5cf;
+  --color-sky: #cfe0f5;
+
+  --font-display: var(--font-big-shoulders), "Mona Sans", sans-serif;
+  --font-sans: var(--font-mona), system-ui, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-step: cubic-bezier(0.34, 1.45, 0.64, 1);
+
+  --breakpoint-xs: 30rem;
+}
+
+/* Raw inks. Never swapped, so focus rings and section grounds stay true. */
+:root {
+  --m-field: #dcd3f5;
+  --m-night: #1f1b2e;
+  --m-night-2: #2b2640;
+  --m-paper: #faf8f4;
+  --m-leaf: #5b3fa8;
+  --m-dim: #a9a3bd;
+  --riso: var(--m-field);
+}
+
+@layer base {
+  /* Colour scopes live in the base layer so utility classes on the same
+     element (text-ink, bg-paper, ...) always override the scope defaults. */
+  /* A light pastel section built from components drawn for dark grounds:
+     "paper" text becomes ink, "night" cards become the section tint's partner
+     (lilac), and the action colour becomes ink. Pair with a bg-* tint class. */
+  .on-tint,
+  .on-field {
+    color: var(--m-night);
+    --color-paper: var(--m-night);
+    --color-ink: var(--m-paper);
+    --color-field: var(--m-night);
+    --color-night: var(--m-field);
+    --color-leaf: var(--m-leaf);
+    --color-dim: #57526a;
+    --color-slate: #57526a;
+    --riso: var(--m-paper);
+  }
+  .on-field {
+    background-color: var(--m-field);
+  }
+  /* Restore the default tokens inside a coloured section (no background). */
+  .on-night {
+    color: var(--m-paper);
+    --color-paper: var(--m-paper);
+    --color-paper-2: #f1ede6;
+    --color-ink: var(--m-night);
+    --color-field: var(--m-field);
+    --color-night: var(--m-night);
+    --color-leaf: var(--m-leaf);
+    --color-dim: var(--m-dim);
+    --color-slate: #5f5a6e;
+    --riso: var(--m-field);
+  }
+
+  html {
+    background: var(--m-night);
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+  ::selection {
+    background: var(--m-field);
+    color: var(--m-night);
+  }
+  /* Two-ink focus ring: plum with a lilac halo, visible on every ground. */
+  :focus-visible {
+    outline: 3px solid var(--m-night);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 6px var(--m-field);
+    border-radius: 2px;
+  }
+  a {
+    text-underline-offset: 0.2em;
+  }
+  input,
+  textarea {
+    caret-color: var(--m-leaf);
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  /* Condensed display voice: always caps, tight leading. */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.86;
+    letter-spacing: -0.005em;
+  }
+  /* Misregistered second ink, like a risograph pass that slipped. */
+  .riso {
+    text-shadow: 0.045em 0.035em 0 var(--riso);
+  }
+  .data {
+    font-variant-numeric: tabular-nums;
+    font-stretch: 112%;
+  }
+  .label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-stretch: 90%;
+    letter-spacing: 0.03em;
+  }
+  /* Perforated edge between a ticket body and its stub. */
+  .perf-v {
+    background-image: linear-gradient(to bottom, currentColor 50%, transparent 50%);
+    background-size: 2px 10px;
+    background-repeat: repeat-y;
+    width: 2px;
+    opacity: 0.4;
+  }
+  .perf-h {
+    background-image: linear-gradient(to right, currentColor 50%, transparent 50%);
+    background-size: 10px 2px;
+    background-repeat: repeat-x;
+    height: 2px;
+    opacity: 0.4;
+  }
+  /* Half-circle notches where a stub tears off. */
+  .notched {
+    -webkit-mask:
+      radial-gradient(circle 9px at var(--notch, calc(100% - 88px)) 0, #0000 98%, #000) top / 100% 51% no-repeat,
+      radial-gradient(circle 9px at var(--notch, calc(100% - 88px)) 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
+    mask:
+      radial-gradient(circle 9px at var(--notch, calc(100% - 88px)) 0, #0000 98%, #000) top / 100% 51% no-repeat,
+      radial-gradient(circle 9px at var(--notch, calc(100% - 88px)) 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
+  }
+  .portrait-treatment {
+    filter: grayscale(1) contrast(1.12);
+    mix-blend-mode: multiply;
+  }
+}
+
+/* ---------- Hero entrance ----------
+   One short rise-and-fade, staggered by --d. Transform and opacity only, so it
+   runs on the compositor; nothing animates after the first half second. */
+.hero-in {
+  animation: hero-in 560ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+/* Barker line: the original site's Mona Sans, pushed to its widest, heaviest
+   cut so it matches the wordmark's broad geometric stance. */
+.barker {
+  font-family: var(--font-sans);
+  font-weight: 900;
+  font-stretch: 125%;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  line-height: 1;
+}
+
+/* The hero ticket prints: it feeds down out of a slot (clip reveal plus a
+   short drop), then the stamp is pressed onto its corner. */
+.hero-ticket-in {
+  animation: ticket-print 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: 240ms;
+}
+@keyframes ticket-print {
+  from {
+    clip-path: inset(0 0 100% 0);
+    transform: translateY(-18px);
+  }
+  to {
+    clip-path: inset(-40% -40% -40% -40%);
+    transform: none;
+  }
+}
+.stamp-press {
+  animation: stamp-press 420ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation-delay: 900ms;
+}
+@keyframes stamp-press {
+  from {
+    opacity: 0;
+    transform: scale(1.35) rotate(-18deg);
+  }
+}
+
+/* Tour dates: a route line draws down beside the stops as the list scrolls
+   through the viewport, tying the dates into one journey. Scroll-driven
+   where supported; a complete static line everywhere else. */
+.tour-line {
+  transform-origin: top;
+}
+@supports (animation-timeline: view()) {
+  .tour-line {
+    animation: route-draw linear both;
+    animation-timeline: view();
+    animation-range: entry 20% cover 70%;
+  }
+}
+@keyframes route-draw {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+/* Inner page headers get the same short entrance as the home hero. */
+.page-in > * {
+  animation: hero-in 560ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+.page-in > *:nth-child(2) {
+  animation-delay: 70ms;
+}
+.page-in > *:nth-child(3) {
+  animation-delay: 140ms;
+}
+.stamp-spin {
+  animation: stamp-spin 28s linear infinite;
+}
+@keyframes stamp-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Lilac header ground: the home hero's gradient, reused for inner page
+   headers. The wash on the left keeps ink headings well above 7:1. */
+.bg-hero {
+  background-color: var(--m-field);
+  background-image:
+    linear-gradient(90deg, rgba(220, 211, 245, 0.7) 0%, rgba(220, 211, 245, 0.4) 50%, rgba(220, 211, 245, 0.1) 80%),
+    url(/media/hero-bg.webp);
+  background-size: cover;
+  background-position: center;
+}
+
+/* Sand: grainy warm gradient for beige sections. A cream wash on top keeps
+   plum ink above 7:1 even over the darker brown side of the image. */
+.bg-sand {
+  background-color: #e9d8b8;
+  background-image:
+    linear-gradient(rgba(250, 241, 220, 0.5), rgba(250, 241, 220, 0.5)),
+    url(/media/section-sand.webp);
+  background-size: cover;
+  background-position: center;
+}
+
+/* Tide: soft blue-to-mint gradient for the tour list. A light wash keeps
+   plum ink readable over the deep blue corner, which matters on mobile where
+   the list stacks into that corner. */
+.bg-tide {
+  background-color: var(--color-sky);
+  background-image:
+    linear-gradient(rgba(250, 248, 244, 0.38), rgba(250, 248, 244, 0.38)),
+    url(/media/section-tide.webp);
+  background-size: cover;
+  background-position: center;
+}
+
+/* Nebula: grainy violet-to-ink gradient for the dark plum sections, mirrored
+   so the dark side sits under the left-aligned headings. The overlay calms
+   the bright glow on the right so light text stays above 7:1. */
+.bg-nebula {
+  background-color: var(--m-night);
+  background-image:
+    linear-gradient(90deg, rgba(31, 27, 46, 0.55) 0%, rgba(31, 27, 46, 0.2) 55%, rgba(31, 27, 46, 0.5) 100%),
+    url(/media/section-nebula.webp);
+  background-size: cover;
+  background-position: center;
+}
+
+/* Peach: warm peach-to-rose gradient for the closing "Pick your door". */
+.bg-peach {
+  background-color: var(--color-blush);
+  background-image: url(/media/section-peach.webp);
+  background-size: cover;
+  background-position: center;
+}
+
+/* Mist: a barely-there pastel gradient (blush, butter, sage, sky) that
+   replaces flat white on light sections. Light enough that ink, slate text
+   and multiplied logos read exactly as they did on paper. */
+.bg-mist {
+  background-color: var(--m-paper);
+  background-image: url(/media/section-mist.webp);
+  background-size: cover;
+  background-position: center;
+}
+
+/* ---------- Company overview deck (/deck) ---------- */
+body:has(.deck-root) #site-header,
+body:has(.deck-root) #site-footer,
+body:has(.deck-root) a[href="#main"] {
+  display: none;
+}
+.deck-print {
+  display: none;
+}
+@media print {
+  @page {
+    size: 1920px 1080px;
+    margin: 0;
+  }
+  html {
+    scroll-padding-top: 0;
+  }
+  .deck-screen {
+    display: none !important;
+  }
+  .deck-print {
+    display: block;
+  }
+  .deck-page {
+    break-after: page;
+  }
+  .deck-page:last-child {
+    break-after: auto;
+  }
+}
+
+/* Company marquee: two rows drift in opposite directions and pause on hover. */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee linear infinite;
+}
+.marquee-reverse {
+  animation-direction: reverse;
+}
+.group:hover .marquee-track {
+  animation-play-state: paused;
+}
+/* Logos sit on paper as monochrome ink; full colour on hover. Multiply drops
+   the white boxes that some partner files ship with. */
+.logo-mark {
+  filter: grayscale(1) contrast(1.35) brightness(0.8);
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+  transition: filter 0.3s, opacity 0.3s;
+}
+.logo-mark:hover {
+  filter: none;
+  opacity: 1;
+}
+.marquee-mask {
+  -webkit-mask: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  mask: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The route line is simply drawn, not tied to scroll. */
+  .tour-line {
+    animation: none !important;
+  }
+  /* No drift: the rows become a still, wrapped list. */
+  .marquee-track {
+    animation: none !important;
+    width: auto;
+    flex-wrap: wrap;
+    padding-inline: 1rem;
+  }
+  .marquee-dup {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

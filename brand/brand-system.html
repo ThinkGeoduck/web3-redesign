@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Web3 Carnival Brand System</title>
+<meta name="description" content="Midway brand system for the Web3 Carnival redesign: identity board, tokens, type, components and motion.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=Mona+Sans:ital,wdth,wght@0,75..125,300..900;1,75..125,300..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Ticket stock */
+  --red:#C92E14;        /* Ticket Red: committed field colour */
+  --yellow:#FFC21A;     /* Marquee Yellow: primary action only */
+  --navy:#020B25;       /* Carnival Navy: from the official logo */
+  --white:#FAF7F0;      /* Ticket White: dense-content surface */
+  --ink:#0A0A0F;
+  --slate:#5B5E6B;      /* secondary text on white */
+  --dim:#A7ABBD;        /* secondary text on navy */
+  --rule-w:rgba(10,10,15,.14);
+  --rule-n:rgba(250,247,240,.16);
+  --canvas:#0E0F14;     /* presentation canvas only, not a product token */
+
+  --display:"Big Shoulders Display", "Mona Sans", sans-serif;
+  --sans:"Mona Sans", system-ui, sans-serif;
+
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;--s8:64px;--s9:96px;--s10:128px;
+  --r-ticket:6px;
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --ease-step:cubic-bezier(.34,1.45,.64,1);
+}
+*{box-sizing:border-box;margin:0}
+html{background:var(--canvas);color-scheme:dark}
+body{background:var(--canvas);color:var(--white);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+::selection{background:var(--yellow);color:var(--navy)}
+a{color:inherit;text-underline-offset:.2em}
+:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+img{display:block;max-width:100%}
+
+.wrap{max-width:1480px;margin:0 auto;padding:var(--s7) var(--s6) var(--s10)}
+.masthead{display:flex;justify-content:space-between;align-items:end;gap:var(--s5);padding-bottom:var(--s6);border-bottom:1px solid var(--rule-n);margin-bottom:var(--s6)}
+.masthead h1{font-family:var(--display);font-weight:800;font-size:clamp(2.2rem,4vw,3.4rem);line-height:.95;text-transform:uppercase;letter-spacing:.01em}
+.masthead p{color:var(--dim);max-width:46ch;font-size:.95rem}
+
+/* ---------- Board ---------- */
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.panel{position:relative;aspect-ratio:16/10;overflow:hidden;border-radius:4px;padding:clamp(16px,2vw,28px);display:flex;flex-direction:column}
+.cap{margin-top:auto;padding-top:10px;font-size:.72rem;line-height:1.35;font-weight:500;font-stretch:90%;letter-spacing:.04em;opacity:.72}
+.on-red{background:var(--red);color:var(--white)}
+.on-navy{background:var(--navy);color:var(--white)}
+.on-white{background:var(--white);color:var(--ink)}
+.on-yellow{background:var(--yellow);color:var(--navy)}
+
+/* 1 cover */
+.cover{justify-content:space-between}
+.cover .tile{width:clamp(54px,6vw,84px)}
+.cover .word{font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.82;font-size:clamp(3rem,5.4vw,5.4rem);letter-spacing:-.01em}
+.cover .word span{display:block}
+.cover .word span+span{color:var(--navy)}
+.cover .meta{display:flex;justify-content:space-between;font-size:.72rem;font-stretch:90%;letter-spacing:.04em;opacity:.8;padding-bottom:2px}
+
+/* 2 construction */
+.construct .stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--s4)}
+.clear{position:relative;padding:22px;outline:1px dashed rgba(10,10,15,.35)}
+.clear img{width:clamp(70px,8vw,112px)}
+.clear::before,.clear::after{content:"";position:absolute;background:var(--red);opacity:.9}
+.clear::before{left:0;top:50%;width:22px;height:1px}
+.clear::after{top:0;left:50%;height:22px;width:1px}
+.grounds{display:flex;gap:var(--s3)}
+.grounds div{width:44px;height:44px;display:grid;place-items:center;border-radius:3px}
+.grounds img{width:30px}
+.grounds .g-navy img{outline:1.5px solid var(--white);outline-offset:0}
+
+/* 3 browser */
+.browser{padding:clamp(12px,1.6vw,22px)}
+.chrome{background:var(--white);border-radius:6px;overflow:hidden;flex:1;display:flex;flex-direction:column;box-shadow:0 18px 40px -18px rgba(0,0,0,.6)}
+.bar{display:flex;align-items:center;gap:6px;padding:7px 10px;background:#E9E4D8}
+.bar i{width:7px;height:7px;border-radius:50%;background:rgba(10,10,15,.2)}
+.url{margin-left:8px;flex:1;background:var(--white);border-radius:3px;font-size:.62rem;padding:3px 8px;color:var(--slate)}
+.mini{flex:1;display:grid;grid-template-rows:1fr auto;background:var(--red);color:var(--white)}
+.mini-top{padding:10px 12px;display:flex;flex-direction:column;justify-content:space-between}
+.mini-nav{display:flex;justify-content:space-between;align-items:center;font-size:.55rem;font-weight:600}
+.mini-nav img{width:22px}
+.mini h3{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(1.4rem,2.9vw,2.4rem);line-height:.85}
+.mini-blind{background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:7px 12px;gap:8px}
+.mini-blind b{font-family:var(--display);font-weight:800;text-transform:uppercase;color:var(--yellow);font-size:.9rem;letter-spacing:.02em}
+.mini-btn{background:var(--yellow);color:var(--navy);font-size:.56rem;font-weight:700;padding:5px 9px;border-radius:2px;white-space:nowrap}
+
+/* 4 essence */
+.essence{justify-content:center}
+.essence h2{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(3rem,7vw,5.8rem);line-height:.84;color:var(--yellow)}
+.essence p{margin-top:var(--s4);max-width:30ch;color:var(--dim);font-size:clamp(.8rem,1vw,.95rem)}
+
+/* 5 colour */
+.colour{gap:var(--s3);justify-content:center}
+.colour .cap{margin-top:0}
+.stubs{display:grid;grid-template-columns:1.6fr 1fr 1.3fr 1fr .6fr;gap:6px;height:62%}
+.stub{border-radius:var(--r-ticket);padding:10px 9px;display:flex;flex-direction:column;justify-content:space-between;
+  -webkit-mask:radial-gradient(circle 6px at 50% 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle 6px at 50% 100%,#0000 98%,#000) bottom/100% 51% no-repeat;
+          mask:radial-gradient(circle 6px at 50% 0,#0000 98%,#000) top/100% 51% no-repeat,radial-gradient(circle 6px at 50% 100%,#0000 98%,#000) bottom/100% 51% no-repeat}
+.stub b{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(.8rem,1.1vw,1rem);line-height:1}
+.stub small{font-size:.6rem;font-stretch:88%;font-variant-numeric:tabular-nums;opacity:.85}
+.stub.s-white{box-shadow:inset 0 0 0 1px var(--rule-w)}
+.share{display:flex;height:8px;border-radius:2px;overflow:hidden}
+.share span{display:block}
+
+/* 6 type */
+.type{justify-content:space-between}
+.type .big{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(3.4rem,8vw,6.4rem);line-height:.8;letter-spacing:-.01em}
+.type .row{display:flex;justify-content:space-between;align-items:end;gap:var(--s4);padding-bottom:18px}
+.type .body{font-size:clamp(.72rem,.95vw,.88rem);max-width:30ch;color:var(--slate)}
+.type .body strong{color:var(--ink);font-weight:650}
+.type .nums{font-size:clamp(1.3rem,2.4vw,2rem);font-weight:750;font-stretch:112%;font-variant-numeric:tabular-nums;color:var(--red);line-height:1}
+
+/* 7 ticket */
+.physical{align-items:center;justify-content:center}
+.ticket{width:88%;display:grid;grid-template-columns:1fr auto;background:var(--white);color:var(--ink);border-radius:var(--r-ticket);transform:rotate(-3deg);box-shadow:0 22px 40px -20px rgba(0,0,0,.55);
+  transition:transform .5s var(--ease-out)}
+.ticket:hover{transform:rotate(-1deg) translateY(-3px)}
+.t-main{padding:clamp(10px,1.4vw,18px);display:flex;flex-direction:column;gap:4px;border-right:2px dashed rgba(10,10,15,.28)}
+.t-main .admit{font-family:var(--display);font-weight:900;font-size:clamp(1.6rem,3.2vw,2.6rem);line-height:.85;text-transform:uppercase}
+.t-main .role{font-family:var(--display);font-weight:800;text-transform:uppercase;color:var(--red);font-size:clamp(.8rem,1.3vw,1.1rem)}
+.t-main .fine{font-size:.6rem;color:var(--slate);font-stretch:90%}
+.t-stub{padding:10px;display:flex;flex-direction:column;justify-content:space-between;align-items:center;min-width:64px}
+.t-stub img{width:32px}
+.t-stub span{writing-mode:vertical-rl;font-size:.58rem;font-variant-numeric:tabular-nums;font-stretch:88%;color:var(--slate)}
+
+/* 8 image */
+.image{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(10px,1.4vw,18px)}
+.portrait{background:var(--red);overflow:hidden;border-radius:2px}
+.portrait img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.12) brightness(1.02);mix-blend-mode:multiply}
+.img-side{display:flex;flex-direction:column;justify-content:space-between}
+.img-side .name{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:clamp(1.4rem,2.6vw,2.2rem);line-height:.86}
+.img-side .role{font-size:.66rem;font-stretch:92%;margin-top:6px;max-width:26ch}
+.ph{flex:1;margin-top:10px;border:1.5px dashed rgba(2,11,37,.45);border-radius:2px;display:grid;place-items:center;text-align:center;padding:8px;font-size:.6rem;font-weight:600;font-stretch:90%;letter-spacing:.03em}
+
+/* 9 system */
+.system{gap:clamp(10px,1.3vw,16px);justify-content:center}
+.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.chip{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(.72rem,1vw,.9rem);letter-spacing:.02em;padding:6px 10px;border-radius:999px;border:1.5px solid var(--rule-n);color:var(--dim);background:none;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--white);color:var(--navy);border-color:var(--white)}
+.x{width:10px;height:10px;opacity:.55}
+.blind{height:clamp(40px,4.2vw,56px);overflow:hidden;background:#0A1535;border-radius:3px;position:relative}
+.blind ul{list-style:none;padding:0;animation:step 12s var(--ease-step) infinite}
+.blind li{height:clamp(40px,4.2vw,56px);display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:clamp(1.1rem,2vw,1.7rem);color:var(--yellow)}
+.blind li small{font-family:var(--sans);font-weight:500;font-size:.6rem;color:var(--dim);text-transform:none;font-stretch:90%}
+@keyframes step{
+  0%,16%{transform:translateY(0)}
+  20%,36%{transform:translateY(-20%)}
+  40%,56%{transform:translateY(-40%)}
+  60%,76%{transform:translateY(-60%)}
+  80%,96%{transform:translateY(-80%)}
+  100%{transform:translateY(0)}
+}
+.match{display:flex;gap:6px;font-size:.62rem;font-stretch:90%;color:var(--dim)}
+.match span{display:flex;align-items:center;gap:5px}
+.match i{width:9px;height:9px;border-radius:50%;display:block}
+
+/* ---------- Spec ---------- */
+.spec{margin-top:var(--s9);display:grid;gap:var(--s9)}
+.sec{display:grid;grid-template-columns:minmax(200px,1fr) 3fr;gap:var(--s6);border-top:1px solid var(--rule-n);padding-top:var(--s6)}
+.sec>h2{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:2rem;line-height:.95}
+.sec>h2+p{grid-column:1}
+.lede{color:var(--dim);font-size:.92rem;max-width:36ch;margin-top:var(--s3)}
+.body-col{display:grid;gap:var(--s6)}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{text-align:left;padding:10px 12px 10px 0;border-bottom:1px solid var(--rule-n);vertical-align:top}
+th{font-weight:600;color:var(--dim);font-size:.75rem;letter-spacing:.03em}
+td code,p code{font-size:.82em;background:rgba(250,247,240,.07);padding:1px 5px;border-radius:3px}
+.sw{display:inline-block;width:14px;height:14px;border-radius:2px;vertical-align:-2px;margin-right:8px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+.prose{color:#D9DBE3;max-width:68ch;display:grid;gap:var(--s3)}
+.prose strong{color:var(--white)}
+.scale{display:grid;gap:var(--s4)}
+.scale div{display:grid;grid-template-columns:150px 1fr;align-items:baseline;gap:var(--s4);border-bottom:1px solid var(--rule-n);padding-bottom:var(--s3)}
+.scale small{color:var(--dim);font-size:.72rem;font-variant-numeric:tabular-nums}
+.d{font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.88}
+.spacing{display:flex;align-items:end;gap:10px;flex-wrap:wrap}
+.spacing div{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.7rem;color:var(--dim);font-variant-numeric:tabular-nums}
+.spacing span{display:block;background:var(--red);width:18px}
+.gridviz{display:grid;gap:var(--s4)}
+.gridrow{display:grid;gap:6px;height:44px}
+.gridrow i{background:rgba(201,46,20,.28);border-radius:2px}
+.gridlabel{font-size:.75rem;color:var(--dim)}
+
+/* components */
+.comp{background:var(--white);color:var(--ink);border-radius:4px;padding:var(--s6);display:grid;gap:var(--s6)}
+.comp-row{display:flex;flex-wrap:wrap;gap:var(--s4);align-items:center}
+.comp-label{font-size:.72rem;color:var(--slate);font-weight:600;letter-spacing:.03em;margin-bottom:var(--s3)}
+.btn{font-family:var(--sans);font-weight:700;font-stretch:105%;font-size:.95rem;min-height:48px;padding:0 22px;border-radius:3px;border:0;cursor:pointer;display:inline-flex;align-items:center;gap:10px;transition:transform .18s var(--ease-out),background-color .18s,box-shadow .18s}
+.btn svg{width:18px;height:18px}
+.btn-primary{background:var(--yellow);color:var(--navy);box-shadow:0 2px 0 rgba(2,11,37,.25)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 16px -8px rgba(2,11,37,.45)}
+.btn-primary:active{transform:translateY(0)}
+.btn-secondary{background:var(--navy);color:var(--white)}
+.btn-secondary:hover{background:#0B1A45}
+.btn-ghost{background:none;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn-ghost:hover{background:var(--ink);color:var(--white)}
+.btn[disabled]{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.link{font-weight:650;color:var(--red);text-decoration:underline;text-decoration-thickness:1.5px}
+.fchip{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:1rem;padding:8px 14px;border-radius:999px;border:1.5px solid rgba(10,10,15,.25);background:none;color:var(--ink);cursor:pointer;min-height:40px}
+.fchip[aria-pressed="true"]{background:var(--navy);color:var(--white);border-color:var(--navy)}
+.tag{font-size:.72rem;font-weight:650;font-stretch:92%;padding:3px 8px;border-radius:2px;background:rgba(201,46,20,.1);color:var(--red)}
+.tag.ph-tag{background:none;box-shadow:inset 0 0 0 1px currentColor;color:var(--slate)}
+
+.evcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:var(--s4)}
+.ev{display:grid;grid-template-columns:1fr 78px;background:var(--red);color:var(--white);border-radius:var(--r-ticket);min-height:170px;transition:transform .35s var(--ease-out)}
+.ev:hover{transform:translateY(-3px) rotate(-.6deg)}
+.ev-main{padding:16px;display:flex;flex-direction:column;justify-content:space-between;border-right:2px dashed rgba(250,247,240,.45)}
+.ev-main h4{font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:1.7rem;line-height:.88}
+.ev-main p{font-size:.78rem;opacity:.9}
+.ev-stub{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.85}
+.ev-stub b{font-size:2.2rem}
+.ev-stub small{font-size:.9rem}
+.ev.navy{background:var(--navy)}
+.ev.yellow{background:var(--yellow);color:var(--navy)}
+.ev.yellow .ev-main{border-color:rgba(2,11,37,.35)}
+
+.spk{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,210px));gap:var(--s4)}
+.spk figure{display:grid;gap:8px}
+.spk .ph-img{aspect-ratio:4/5;background:var(--yellow);overflow:hidden;border-radius:2px}
+.spk .ph-img img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.12);mix-blend-mode:multiply;transition:transform .5s var(--ease-out)}
+.spk figure:hover img{transform:scale(1.04)}
+.spk figcaption b{display:block;font-family:var(--display);font-weight:900;text-transform:uppercase;font-size:1.25rem;line-height:.9}
+.spk figcaption span{font-size:.78rem;color:var(--slate);display:block;margin-top:4px}
+
+.field{display:grid;gap:6px;max-width:360px}
+.field label{font-weight:650;font-size:.85rem}
+.field input{font:inherit;font-size:1rem;min-height:48px;padding:0 14px;border:1.5px solid rgba(10,10,15,.3);border-radius:3px;background:#fff;color:var(--ink);caret-color:var(--red)}
+.field input:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(255,194,26,.7)}
+.field input[aria-invalid="true"]{border-color:var(--red)}
+.field .err{font-size:.8rem;color:var(--red);font-weight:600}
+.field .hint{font-size:.8rem;color:var(--slate)}
+
+.motion-list{display:grid;gap:0}
+.motion-list div{display:grid;grid-template-columns:200px 1fr 130px;gap:var(--s4);padding:12px 0;border-bottom:1px solid var(--rule-n);font-size:.9rem}
+.motion-list b{font-weight:650}
+.motion-list span{color:var(--dim)}
+.motion-list code{justify-self:end;color:var(--yellow);font-size:.78rem;background:none}
+
+.foot{margin-top:var(--s9);padding-top:var(--s5);border-top:1px solid var(--rule-n);display:flex;justify-content:space-between;gap:var(--s4);flex-wrap:wrap;color:var(--dim);font-size:.8rem}
+
+@media (max-width:1100px){
+  .board{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:720px){
+  .wrap{padding:var(--s6) var(--s4) var(--s9)}
+  .masthead{flex-direction:column;align-items:start}
+  .board{grid-template-columns:1fr}
+  .panel{aspect-ratio:auto;min-height:260px}
+  .cover{min-height:340px}
+  .sec{grid-template-columns:1fr;gap:var(--s5)}
+  .scale div{grid-template-columns:1fr}
+  .motion-list div{grid-template-columns:1fr}
+  .motion-list code{justify-self:start}
+  table{font-size:.8rem}
+  .table-scroll{overflow-x:auto}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <h1>Web3 Carnival<br>Brand system</h1>
+  <p>Midway direction, v0.1 working draft for the Kalakriti redesign. The official logo is used unchanged. Every other element here is a proposal for team review.</p>
+</header>
+
+<main>
+<section class="board" aria-label="Identity board">
+
+  <article class="panel on-red cover">
+    <img class="tile" src="https://www.web3carnival.world/_next/static/media/logo.a67d6019.svg" alt="Web3 Carnival logo">
+    <div class="word" aria-hidden="true"><span>Web3</span><span>Carnival</span></div>
+    <div class="meta"><span>Identity</span><span>Ticket Red field, official mark</span></div>
+  </article>
+
+  <article class="panel on-white construct">
+    <div class="stage">
+    <div class="clear"><img src="https://www.web3carnival.world/_next/static/media/logo.a67d6019.svg" alt="Official logo with clear-space guide"></div>
+    <div class="grounds" aria-label="Approved grounds">
+      <div style="background:var(--red)"><img src="https://www.web3carnival.world/_next/static/media/logo.a67d6019.svg" alt=""></div>
+      <div style="background:var(--yellow)"><img src="https://www.web3carnival.world/_next/static/media/logo.a67d6019.svg" alt=""></div>
+      <div class="g-navy" style="background:var(--navy)"><img src="https://www.web3carnival.world/_next/static/media/logo.a67d6019.svg" alt=""></div>
+      <div style="background:var(--white);box-shadow:inset 0 0 0 1px var(--rule-w)"><img src="https://www.web3carnival.world/_next/static/media/logo.a67d6019.svg" alt=""></div>
+    </div>
+    </div>
+    <p class="cap">Official mark, unchanged. Clear space = ¼ tile. On navy, add a Ticket White keyline.</p>
+  </article>
+
+  <article class="panel on-navy browser">
+    <div class="chrome">
+      <div class="bar"><i></i><i></i><i></i><span class="url">web3carnival.world</span></div>
+      <div class="mini">
+        <div class="mini-top">
+          <div class="mini-nav"><img src="https://www.web3carnival.world/_next/static/media/logo.a67d6019.svg" alt=""><span>Programme · Speakers · Partner</span></div>
+          <h3>Step right up.<br>Web3's carnival<br>is back in town.</h3>
+        </div>
+        <div class="mini-blind"><b>Next stop: date TBC</b><span class="mini-btn">Get your ticket</span></div>
+      </div>
+    </div>
+  </article>
+
+  <article class="panel on-navy essence">
+    <h2>Step<br>right up.</h2>
+    <p>Founders, builders, investors, creators and first-timers. Everyone gets a ticket.</p>
+  </article>
+
+  <article class="panel on-white colour">
+    <div class="stubs">
+      <div class="stub" style="background:var(--red);color:var(--white)"><b>Ticket<br>Red</b><small>#C92E14<br>Fields, 40%</small></div>
+      <div class="stub" style="background:var(--yellow);color:var(--navy)"><b>Marquee<br>Yellow</b><small>#FFC21A<br>Action only</small></div>
+      <div class="stub" style="background:var(--navy);color:var(--white)"><b>Carnival<br>Navy</b><small>#020B25<br>From logo</small></div>
+      <div class="stub s-white" style="background:var(--white);color:var(--ink)"><b>Ticket<br>White</b><small>#FAF7F0<br>Content</small></div>
+      <div class="stub" style="background:var(--ink);color:var(--white)"><b>Ink</b><small>#0A0A0F</small></div>
+    </div>
+    <div class="share" aria-label="Surface share: red 40, navy 30, white 22, yellow 5, ink 3">
+      <span style="flex:40;background:var(--red)"></span><span style="flex:30;background:var(--navy)"></span><span style="flex:22;background:#E3DDCF"></span><span style="flex:5;background:var(--yellow)"></span><span style="flex:3;background:var(--ink)"></span>
+    </div>
+    <p class="cap" style="color:var(--slate)">Three dyes, one committed field. Purple retired.</p>
+  </article>
+
+  <article class="panel on-white type">
+    <div class="big">Billing<br>is size.</div>
+    <div class="row">
+      <p class="body"><strong>Big Shoulders Display</strong> sets headlines, lineups and names in caps. <strong>Mona Sans</strong>, carried over from the current site, handles body, UI and data.</p>
+      <span class="nums">5000+</span>
+    </div>
+  </article>
+
+  <article class="panel on-red physical">
+    <div class="ticket">
+      <div class="t-main">
+        <span class="admit">Admit one</span>
+        <span class="role">Builder × Investor</span>
+        <span class="fine">Web3 Carnival, next edition · date and city TBC</span>
+      </div>
+      <div class="t-stub"><img src="https://www.web3carnival.world/_next/static/media/logo.a67d6019.svg" alt=""><span>Nº 000481 sample</span></div>
+    </div>
+  </article>
+
+  <article class="panel on-yellow image">
+    <div class="portrait"><img src="https://www.web3carnival.world/_next/static/media/raj.064687c4.png" alt="Raj Kapoor, past speaker"></div>
+    <div class="img-side">
+      <div>
+        <div class="name">Raj<br>Kapoor</div>
+        <p class="role">Founder, India Blockchain Alliance. Past speaker.</p>
+      </div>
+      <div class="ph">Event photography<br>placeholder until supplied</div>
+    </div>
+  </article>
+
+  <article class="panel on-navy system">
+    <div class="chips" role="group" aria-label="Role filter sample">
+      <button class="chip" aria-pressed="true">Founder</button>
+      <svg class="x" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.6"/></svg>
+      <button class="chip" aria-pressed="true">Investor</button>
+      <button class="chip" aria-pressed="false">Builder</button>
+      <button class="chip" aria-pressed="false">Creator</button>
+    </div>
+    <div class="blind" aria-label="Destination board of past and next stops">
+      <ul>
+        <li>Bengaluru <small>Dec 2023</small></li>
+        <li>Dubai <small>Apr 2024</small></li>
+        <li>Singapore <small>Sep 2024</small></li>
+        <li>Delhi <small>Apr 2025</small></li>
+        <li>Next stop: TBC <small>placeholder</small></li>
+      </ul>
+    </div>
+    <div class="match"><span><i style="background:var(--yellow)"></i>Both roles</span><span><i style="background:var(--white)"></i>One role</span><span><i style="border:1px solid var(--dim)"></i>Neither</span></div>
+  </article>
+
+</section>
+
+<div class="spec">
+
+  <section class="sec">
+    <div>
+      <h2>Idea</h2>
+      <p class="lede">A carnival is a system of attractions. The brand prints it like a festival bill.</p>
+    </div>
+    <div class="prose">
+      <p><strong>Midway.</strong> Web3 Carnival is a festival series, not a single summit: a flagship week with daily side events, then stops in Dubai, Singapore and Delhi. The identity borrows from printed festival culture: ticket stock, lineup posters, destination boards and stamps. It is set with Swiss-grid discipline so it reads premium, not kitsch.</p>
+      <p><strong>Intersection layer.</strong> Discovery uses the role filter. A visitor picks who they are (Founder × Investor, for example). Sessions, speakers and side events then rank by how many chosen roles they serve. The × glyph is the only Web3-native device in the system.</p>
+      <p><strong>Raised from the challenger round.</strong> <em>Bombay painted poster:</em> billing is size, and yellow is reserved for the primary action. <em>Depot destination blind:</em> city and event names step one course at a time with an overshoot, and nothing glides. <em>Nixie counter:</em> figures sit at fixed tabular positions like ticket serials, never as a hero-metric strip. <em>Tensegrity column:</em> filter results have three distinct states (both roles, one role, neither), not a vague highlight.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div>
+      <h2>Colour</h2>
+      <p class="lede">Committed strategy. Red owns whole regions. Yellow means "act here".</p>
+    </div>
+    <div class="body-col">
+      <div class="table-scroll"><table>
+        <thead><tr><th>Token</th><th>Value</th><th>Role</th><th>Contrast</th></tr></thead>
+        <tbody>
+          <tr><td><span class="sw" style="background:#C92E14"></span><code>--red</code></td><td>#C92E14</td><td>Hero and section fields, event tickets, links on white</td><td>Ticket White on red 5.05:1</td></tr>
+          <tr><td><span class="sw" style="background:#FFC21A"></span><code>--yellow</code></td><td>#FFC21A</td><td>Primary CTA, focus ring, selection, active blind text. Nothing else.</td><td>Navy on yellow 12.05:1</td></tr>
+          <tr><td><span class="sw" style="background:#020B25"></span><code>--navy</code></td><td>#020B25</td><td>Logo colour. Night sections, nav, footer, secondary buttons</td><td>White on navy 18.22:1</td></tr>
+          <tr><td><span class="sw" style="background:#FAF7F0"></span><code>--white</code></td><td>#FAF7F0</td><td>Dense content: speaker roster, agenda, forms, legal</td><td>Ink on white 18.46:1</td></tr>
+          <tr><td><span class="sw" style="background:#0A0A0F"></span><code>--ink</code></td><td>#0A0A0F</td><td>Body text on white</td><td></td></tr>
+          <tr><td><span class="sw" style="background:#5B5E6B"></span><code>--slate</code></td><td>#5B5E6B</td><td>Secondary text on white</td><td>6.02:1</td></tr>
+          <tr><td><span class="sw" style="background:#A7ABBD"></span><code>--dim</code></td><td>#A7ABBD</td><td>Secondary text on navy</td><td>8.54:1</td></tr>
+        </tbody>
+      </table></div>
+      <p class="prose">Functional colours reuse the dyes: error = red text plus icon, never colour alone; success = navy plus a check icon; the placeholder state = a dashed outline with the word "TBC". No gradients and no glow.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div>
+      <h2>Type</h2>
+      <p class="lede">One condensed display voice in caps and one variable workhorse. Size signals rank, as on a festival bill.</p>
+    </div>
+    <div class="scale">
+      <div><small>Display XL · clamp(4rem, 11vw, 9rem) · 900 · 0.82</small><span class="d" style="font-size:clamp(3rem,8vw,6rem)">Step right up</span></div>
+      <div><small>Display L · clamp(2.75rem, 6vw, 5rem) · 900 · 0.86</small><span class="d" style="font-size:clamp(2.2rem,5vw,4rem)">ZK &amp; Security Con</span></div>
+      <div><small>Display M · 2.25rem · 800 · 0.9</small><span class="d" style="font-size:2.25rem">Lisa JY Tan</span></div>
+      <div><small>Display S · 1.25rem · 800 · 1</small><span class="d" style="font-size:1.25rem">Demo Night · Awards · Side events</span></div>
+      <div><small>Body L · 1.125rem · 400 · 1.55 · wdth 100</small><span style="font-size:1.125rem;max-width:62ch">Seven themed Cons, daily side events and a room full of people building the next internet, whether you ship code or are still working out what a wallet is.</span></div>
+      <div><small>Body · 1rem · 400 · 1.5</small><span>Founder, Economics Design. Japan.</span></div>
+      <div><small>Data · 1rem · 700 · wdth 112 · tabular</small><span style="font-weight:700;font-stretch:112%;font-variant-numeric:tabular-nums">5000+ attendees · 250+ investors · 1000+ developers</span></div>
+      <div><small>Label · 0.75rem · 600 · wdth 90 · +0.03em</small><span style="font-size:.75rem;font-weight:600;font-stretch:90%;letter-spacing:.03em">As reported by Web3 Carnival</span></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div>
+      <h2>Space &amp; grid</h2>
+      <p class="lede">4px base. More space above a heading than below it.</p>
+    </div>
+    <div class="body-col">
+      <div class="spacing">
+        <div><span style="height:4px"></span>4</div><div><span style="height:8px"></span>8</div><div><span style="height:12px"></span>12</div><div><span style="height:16px"></span>16</div><div><span style="height:24px"></span>24</div><div><span style="height:32px"></span>32</div><div><span style="height:48px"></span>48</div><div><span style="height:64px"></span>64</div><div><span style="height:96px"></span>96</div><div><span style="height:128px"></span>128</div>
+      </div>
+      <div class="gridviz">
+        <div><p class="gridlabel">Desktop ≥1200: 12 columns, 24px gutter, 48px margin, 1440 max</p><div class="gridrow" style="grid-template-columns:repeat(12,1fr)"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+        <div><p class="gridlabel">Tablet 768–1199: 8 columns, 20px gutter, 32px margin</p><div class="gridrow" style="grid-template-columns:repeat(8,1fr);max-width:66%"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+        <div><p class="gridlabel">Mobile &lt;768: 4 columns, 16px gutter, 16px margin</p><div class="gridrow" style="grid-template-columns:repeat(4,1fr);max-width:28%"><i></i><i></i><i></i><i></i></div></div>
+      </div>
+      <p class="prose">Breakpoints: 480, 768, 1024, 1200, 1440. Section rhythm: 128px desktop, 96px tablet, 64px mobile. Touch targets are at least 44px.</p>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div>
+      <h2>Components</h2>
+      <p class="lede">Every atom is rebuilt in ticket vocabulary. Sample content comes from the real archive.</p>
+    </div>
+    <div class="comp">
+      <div>
+        <p class="comp-label">Buttons: primary, secondary, ghost, disabled, text link</p>
+        <div class="comp-row">
+          <button class="btn btn-primary">Get your ticket <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <button class="btn btn-secondary">Apply to speak</button>
+          <button class="btn btn-ghost">Partner with us</button>
+          <button class="btn btn-primary" disabled>Sold out</button>
+          <a class="link" href="#">See all 70 speakers</a>
+        </div>
+      </div>
+      <div>
+        <p class="comp-label">Filter chips and tags</p>
+        <div class="comp-row">
+          <button class="fchip" aria-pressed="true">Founder</button>
+          <button class="fchip" aria-pressed="false">Builder</button>
+          <button class="fchip" aria-pressed="true">Investor</button>
+          <button class="fchip" aria-pressed="false">Creator</button>
+          <span class="tag">ZK &amp; Security</span>
+          <span class="tag">Side event</span>
+          <span class="tag ph-tag">Date TBC</span>
+        </div>
+      </div>
+      <div>
+        <p class="comp-label">Event tickets: real past events, stub carries the date</p>
+        <div class="evcards">
+          <article class="ev"><div class="ev-main"><h4>Web3 Carnival<br>Bengaluru</h4><p>Palm Meadows · flagship week</p></div><div class="ev-stub"><b>04</b><small>Dec 23</small></div></article>
+          <article class="ev navy"><div class="ev-main"><h4>DeGen Summit</h4><p>HUONE Singapore</p></div><div class="ev-stub"><b>16</b><small>Sep 24</small></div></article>
+          <article class="ev yellow"><div class="ev-main"><h4>Founders &amp;<br>Funders Night</h4><p>Delhi, India</p></div><div class="ev-stub"><b>05</b><small>Apr 25</small></div></article>
+        </div>
+      </div>
+      <div>
+        <p class="comp-label">Speaker cards: grayscale 4:5 on stock colour, name in caps</p>
+        <div class="spk">
+          <figure><div class="ph-img"><img src="https://www.web3carnival.world/_next/static/media/lisa.f6f40967.png" alt="Lisa JY Tan" loading="lazy"></div><figcaption><b>Lisa JY Tan</b><span>CEO and Founder, Economics Design · Japan</span></figcaption></figure>
+          <figure><div class="ph-img" style="background:var(--red)"><img src="https://www.web3carnival.world/_next/static/media/vidhi.5cc9f80d.jpg" alt="Vidhi Doshi" loading="lazy"></div><figcaption><b>Vidhi Doshi</b><span>Sr. Associate, Blockchain Founders Fund · India</span></figcaption></figure>
+          <figure><div class="ph-img" style="background:#8FB8FF"><img src="https://www.web3carnival.world/_next/static/media/aneesh.7f75e89f.jpg" alt="Anish Mohammed" loading="lazy"></div><figcaption><b>Anish Mohammed</b><span>Co-Founder, CTO &amp; Chief Scientist, Panther Protocol · Dubai</span></figcaption></figure>
+        </div>
+      </div>
+      <div>
+        <p class="comp-label">Form field: default, focus (yellow ring), error</p>
+        <div class="comp-row" style="align-items:start">
+          <div class="field"><label for="f1">Work email</label><input id="f1" type="email" placeholder="you@company.com"><span class="hint">We send your ticket here.</span></div>
+          <div class="field"><label for="f2">Work email</label><input id="f2" type="email" value="you@company" aria-invalid="true" aria-describedby="f2e"><span class="err" id="f2e">Add the domain, for example you@company.com.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div>
+      <h2>Motion</h2>
+      <p class="lede">Things snap and step like print machinery. Nothing floats. Content is visible before any motion starts.</p>
+    </div>
+    <div class="motion-list">
+      <div><b>Destination board</b><span>Next-stop and city names step one course with a small overshoot. This is the signature move.</span><code>380ms step</code></div>
+      <div><b>Ticket tear</b><span>On registration, the stub separates along the perforation and your ticket stays in view.</span><code>520ms out-expo</code></div>
+      <div><b>Filter re-rank</b><span>Cards re-order by match count using FLIP. Matches lift and non-matches drop to 40% opacity.</span><code>300ms out-expo</code></div>
+      <div><b>Billing expand</b><span>Lineup names grow one step in size as they enter the viewport. Runs once, never on loop.</span><code>600ms out-expo</code></div>
+      <div><b>Stamp</b><span>A date stamp lands on hovered event cards with a scale from 1.08 to 1, without a bounce.</span><code>140ms</code></div>
+      <div><b>Reduced motion</b><span>All steps become instant swaps. The board shows the next stop with no animation.</span><code>0ms</code></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div>
+      <h2>Rules</h2>
+      <p class="lede">What keeps it premium.</p>
+    </div>
+    <div class="prose">
+      <p><strong>Logo.</strong> Use the official tile as supplied. Never recolour, outline or stretch it. The poster lockup ("WEB3 / CARNIVAL" in Big Shoulders) is a proposed secondary treatment for headlines only, never a replacement mark. The Threeway Studio credit moves to the footer.</p>
+      <p><strong>Photography.</strong> Speaker headshots come from many sources, so they are unified as grayscale 4:5 crops on a stock colour. Event photography stays in full colour, is cropped 3:2 or 21:9, and is not filtered. Real photos are missing today, and every slot shows a labelled placeholder.</p>
+      <p><strong>Refusals.</strong> No purple, gradients, glass, 3D coins, neon glow or terminal styling. The × glyph is the only crypto-native mark. Carnival devices (stubs, stamps, blinds) carry function every time; there is no decorative bunting.</p>
+      <p><strong>Truth.</strong> Next-edition facts render as "TBC" until confirmed. Figures carry the note "as reported by Web3 Carnival".</p>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer class="foot">
+  <span>Web3 Carnival brand system · Midway v0.1 · draft for review</span>
+  <span>Logo, speaker names and photos: web3carnival.world. Ticket serial is sample data.</span>
+</footer>
+
+</div>
+</body>
+</html>
