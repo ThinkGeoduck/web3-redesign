@@ -8,7 +8,7 @@ Web3 Carnival is a festival of Web3 events rather than a single conference: a fl
 
 **Deliverables**
 
-- **Website:** ten routes plus a 404, built with Next.js 16 and Tailwind v4 (screenshots below).
+- **Website:** ten routes plus a 404, built with Next.js 16 and Tailwind v4 (screenshots below). Website Live [here](https://web3-redesign.vercel.app/)
 - **Company overview deck:** 13 slides in the same brand kit, presentable at `/deck` and exported as a [PDF](public/docs/web3-carnival-company-overview.pdf). See [Company overview deck](#company-overview-deck).
 
 ## Screenshots
